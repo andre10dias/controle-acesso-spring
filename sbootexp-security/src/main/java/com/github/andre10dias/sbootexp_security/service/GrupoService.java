@@ -22,4 +22,8 @@ public class GrupoService {
         return repository.findAll();
     }
 
+    public List<Grupo> buscarPorNomes(List<String> nomes) {
+        return repository.findByNomeIn(nomes);
+    }
+
 }
