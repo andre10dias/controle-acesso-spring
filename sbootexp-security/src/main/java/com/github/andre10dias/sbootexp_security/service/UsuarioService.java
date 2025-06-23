@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -45,6 +46,18 @@ public class UsuarioService {
         usuario.setUsuarioGrupos(usuarioGrupos);
 
         usuarioGrupoRepository.saveAll(usuarioGrupos);
+        return usuario;
+    }
+
+    public Usuario obterUsuarioComPermissoes(String login) {
+        Optional<Usuario> optional = Optional.ofNullable(usuarioRepository.findByLogin(login));
+        if (optional.isPresent()) {
+            return null;
+        }
+
+        Usuario usuario = optional.get();
+        List<String> permissoes = usuarioGrupoRepository.findPermissoesByUsuarioId(usuario.getId());
+        usuario.setPermissoes(permissoes);
         return usuario;
     }
 

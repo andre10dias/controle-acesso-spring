@@ -45,4 +45,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UsuarioGrupo> usuarioGrupos = new ArrayList<>();
 
+    @Transient
+    private List<String> permissoes = new ArrayList<>();
+
 }

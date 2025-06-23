@@ -47,4 +47,6 @@ public class UsuarioController implements GenericController {
         return ResponseEntity.ok(dtos);
     }
 
+
+
 }
