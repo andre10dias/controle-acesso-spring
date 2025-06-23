@@ -20,4 +20,15 @@ public interface UsuarioGrupoRepository extends JpaRepository<UsuarioGrupo, UUID
     )
     List<String> findPermissoesByUsuarioId(UUID id);
 
+    @Query(
+            """
+                SELECT ug
+                        FROM UsuarioGrupo ug
+                        join ug.grupo g
+                        join ug.usuario u
+                        WHERE ug.usuario.id = ?1
+            """
+    )
+    List<UsuarioGrupo> findUsuarioGruposByUsuarioId(UUID id);
+
 }

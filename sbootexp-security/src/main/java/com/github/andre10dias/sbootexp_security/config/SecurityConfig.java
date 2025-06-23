@@ -26,6 +26,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(
             HttpSecurity http,
             SenhaMasterAuthenticationProvider senhaMasterAuthenticationProvider,
+            CustomAuthenticationProvider customAuthenticationProvider,
             CustomFilter customFilter
     )  throws Exception {
         return http
@@ -38,6 +39,7 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authenticationProvider(senhaMasterAuthenticationProvider) // Sobrescreve o authenticator provider default (UserDetailsService)
+                .authenticationProvider(customAuthenticationProvider)
                 .addFilterBefore(customFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }

@@ -1,8 +1,8 @@
 package com.github.andre10dias.sbootexp_security.service;
 
 import com.github.andre10dias.sbootexp_security.api.dto.CadastroUsuarioDTO;
+import com.github.andre10dias.sbootexp_security.api.dto.UsuarioComSenhaDTO;
 import com.github.andre10dias.sbootexp_security.api.mapper.UsuarioComSenhaMapper;
-import com.github.andre10dias.sbootexp_security.api.mapper.UsuarioMapper;
 import com.github.andre10dias.sbootexp_security.domain.entity.Grupo;
 import com.github.andre10dias.sbootexp_security.domain.entity.Usuario;
 import com.github.andre10dias.sbootexp_security.domain.entity.UsuarioGrupo;
@@ -49,16 +49,20 @@ public class UsuarioService {
         return usuario;
     }
 
-    public Usuario obterUsuarioComPermissoes(String login) {
+    public CadastroUsuarioDTO obterUsuarioComPermissoes(String login) {
         Optional<Usuario> optional = Optional.ofNullable(usuarioRepository.findByLogin(login));
-        if (optional.isPresent()) {
+        if (optional.isEmpty()) {
             return null;
         }
 
         Usuario usuario = optional.get();
+        UsuarioComSenhaDTO usuarioComSenhaDTO = UsuarioComSenhaMapper.toDTO(usuario);
         List<String> permissoes = usuarioGrupoRepository.findPermissoesByUsuarioId(usuario.getId());
-        usuario.setPermissoes(permissoes);
-        return usuario;
+
+        return new CadastroUsuarioDTO(
+                usuarioComSenhaDTO,
+                permissoes
+        );
     }
 
     public void validarNomesDeGruposExistentes(List<String> nomesRequisitados, List<Grupo> gruposEncontrados) {

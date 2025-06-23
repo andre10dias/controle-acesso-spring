@@ -1,6 +1,7 @@
 package com.github.andre10dias.sbootexp_security.config;
 
-import com.github.andre10dias.sbootexp_security.domain.entity.Usuario;
+import com.github.andre10dias.sbootexp_security.api.dto.CadastroUsuarioDTO;
+import com.github.andre10dias.sbootexp_security.api.dto.UsuarioComSenhaDTO;
 import com.github.andre10dias.sbootexp_security.security.CustomAuthentication;
 import com.github.andre10dias.sbootexp_security.security.IdentificacaoUsuario;
 import com.github.andre10dias.sbootexp_security.service.UsuarioService;
@@ -24,18 +25,20 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         String login = authentication.getName();
         String senha = authentication.getCredentials().toString();
 
-        Usuario usuario = usuarioService.obterUsuarioComPermissoes(login);
-        if (usuario != null && passwordEncoder.matches(senha, usuario.getSenha())) {
+        CadastroUsuarioDTO dto = usuarioService.obterUsuarioComPermissoes(login);
+
+        if (dto != null && passwordEncoder.matches(senha, dto.usuario().senha())) {
+            UsuarioComSenhaDTO usuario = dto.usuario();
             IdentificacaoUsuario identificacao = new IdentificacaoUsuario(
-                    usuario.getId(),
-                    usuario.getNome(),
-                    usuario.getLogin(),
-                    usuario.getPermissoes()
+                    usuario.id(),
+                    usuario.nome(),
+                    usuario.login(),
+                    dto.permissoes()
             );
 
             return new CustomAuthentication(identificacao);
         }
-        
+
         return null;
     }
 
