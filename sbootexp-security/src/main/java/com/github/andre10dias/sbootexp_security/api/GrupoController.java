@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RestController
@@ -37,7 +36,7 @@ public class GrupoController implements GenericController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<GrupoDTO>> listar() {
         List<Grupo> grupos = grupoService.listar();
-        List<GrupoDTO> dtos = grupos.stream().map(GrupoMapper::toDTO).collect(Collectors.toList());
+        List<GrupoDTO> dtos = grupos.stream().map(GrupoMapper::toDTO).toList();
         return ResponseEntity.ok(dtos);
     }
 

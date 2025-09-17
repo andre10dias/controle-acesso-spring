@@ -31,12 +31,11 @@ public class SecurityConfig {
     )  throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(customizer -> {
-                    customizer
-                            .requestMatchers("/public/**").permitAll()
-                            .requestMatchers("/h2-console/**").permitAll()
-                            .anyRequest().authenticated();
-                })
+                .authorizeHttpRequests(customizer -> customizer
+                        .requestMatchers("/public/**").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
+                        .anyRequest().authenticated()
+                )
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authenticationProvider(senhaMasterAuthenticationProvider) // Sobrescreve o authenticator provider default (UserDetailsService)

@@ -1,15 +1,17 @@
 package com.github.andre10dias.sbootexp_security.security;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
-public class CustomAuthentication implements Authentication {
+public class CustomAuthentication implements Authentication, Serializable {
+    
+    @Serial
+    private static final long serialVersionUID = 1L;
 
     private final IdentificacaoUsuario identificacaoUsuario;
 
@@ -26,7 +28,7 @@ public class CustomAuthentication implements Authentication {
         return this.identificacaoUsuario.getPermissoes()
                 .stream()
                 .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -51,7 +53,12 @@ public class CustomAuthentication implements Authentication {
 
     @Override
     public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-
+        /*
+         * This method is intentionally left empty and throws UnsupportedOperationException because
+         * the authentication state should only be set during the authentication process.
+         * Once created, the authentication token's state should remain immutable.
+         */
+        throw new UnsupportedOperationException("Cannot set the authentication state - use the appropriate AuthenticationManager to authenticate");
     }
 
     @Override
